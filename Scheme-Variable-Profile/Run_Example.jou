@@ -1,0 +1,15 @@
+(rp-var-define 'velocity-inlet 10 'real #f)  
+/define/user-defined/compiled-functions compile "libudf" yes "scheme-profile.c" "" "" 
+/define/user-defined/compiled-functions load "libudf" 
+/file/read-case "UDF-Scheme-Profile.msh" 
+/define/boundary-conditions/velocity-inlet inlet no no yes yes yes yes "udf" "velocity_inlet::libudf" no 0. 
+/define/boundary-conditions/pressure-outlet outlet no 0. no yes no no 
+/define/boundary-conditions/wall sky no yes shear-bc-spec-shear no 0. no 0. 
+/define/boundary-conditions/wall slip no yes shear-bc-spec-shear no 0. no 0. 
+/define/models/viscous/laminar? yes
+/define/user-defined/function-hooks initialization "init_scheme_variable::libudf" "" 
+/define/user-defined/function-hooks adjust "update_scheme_variable::libudf" ""
+/solve/initialize hyb-initialization
+/solve/iterate 200
+
+
